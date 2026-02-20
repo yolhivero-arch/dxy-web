@@ -1,0 +1,8 @@
+{
+  "name": "DXY Suplementos - Control de Gestión",
+  "description": "Sistema integral de gestión para DXY Suplementos: Inventario, Análisis de Ventas por IA, Control de Gastos y Calculadora de Descuentos.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

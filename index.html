@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DXY Suplementos - Gestión</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              brand: {
+                yellow: '#F9D85A',
+                gray: '#575756',
+                dark: '#333333',
+                light: '#f4f4f4',
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #575756; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #333333; }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+            /* ESTILOS GENERALES DE IMPRESIÓN */
+            .print-hidden {
+                display: none !important;
+            }
+
+            /* CABECERA DE IMPRESIÓN */
+            .print-header {
+                display: flex !important;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem;
+                border-bottom: 4px solid #F9D85A;
+                margin-bottom: 1.5rem;
+            }
+            .print-header .logo { font-size: 1.8rem; font-weight: 900; font-style: italic; }
+            .print-header .logo-dx { color: #333333; }
+            .print-header .logo-y { color: #F9D85A; }
+            .print-header .date { font-size: 0.75rem; font-weight: 700; color: #575756; }
+
+            /* --- ESTILOS OPTIMIZADOS PARA CATÁLOGO --- */
+            #catalogPrintArea .p-10 { padding: 1rem !important; }
+            #catalogPrintArea .product-sections-container {
+                column-count: 3;
+                column-gap: 20px;
+            }
+            #catalogPrintArea section {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                margin-bottom: 1rem;
+            }
+            #catalogPrintArea h3 {
+                font-size: 0.8rem !important;
+                padding: 4px 8px !important;
+                margin-bottom: 0.5rem !important;
+                background-color: #f3f4f6 !important;
+                border-bottom: 2px solid #e5e7eb !important;
+            }
+            #catalogPrintArea .table-print th, #catalogPrintArea .table-print td {
+                padding: 4px 6px !important;
+            }
+            #catalogPrintArea .table-print th { font-size: 0.55rem !important; }
+            #catalogPrintArea .table-print .font-bold { font-size: 0.65rem !important; }
+            #catalogPrintArea .table-print .text-xs { font-size: 0.6rem !important; }
+            #catalogPrintArea .table-print .font-black { font-size: 0.7rem !important; }
+            #catalogPrintArea .stock-out {
+                color: #ef4444 !important;
+                font-weight: 900;
+                font-size: 0.6rem !important;
+            }
+            
+            /* --- ESTILOS OPTIMIZADOS PARA FACTURA --- */
+            #invoicePrintArea {
+                border-top: 4px solid #F9D85A !important;
+                padding: 1.5rem !important;
+            }
+             #invoicePrintArea h1, #invoicePrintArea h2 { font-size: 1.2rem !important; }
+            .invoice-header-box { padding: 0.75rem !important; margin-bottom: 1rem !important; }
+            .invoice-header-box p { font-size: 8px !important; margin-top: 0.25rem !important; }
+            .invoice-client-box { padding: 0.75rem !important; margin-bottom: 1rem !important; }
+            .invoice-client-box p { font-size: 8px !important; }
+            .invoice-table-container { margin-bottom: 1rem !important; }
+            .invoice-table-container th { padding: 5px 8px !important; font-size: 8px !important; }
+            .invoice-table-container td { padding: 4px 8px !important; font-size: 8px !important; }
+            .invoice-totals-container { margin-bottom: 1.5rem !important; }
+            .invoice-totals-box { padding: 0.5rem !important; }
+            .invoice-totals-box span:first-child { font-size: 9px !important; }
+            .invoice-totals-box span:last-child { font-size: 1.4rem !important; }
+            .invoice-footer-container { padding-top: 1rem !important; }
+            .invoice-footer-container p { font-size: 7px !important; }
+            .invoice-footer-container .w-24, .invoice-footer-container .h-24 { width: 5rem !important; height: 5rem !important; }
+        }
+
+/* Toast animations */
+@keyframes slide-in-from-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-in {
+  animation-fill-mode: both;
+}
+
+.slide-in-from-right {
+  animation-name: slide-in-from-right;
+}
+
+/* Dark Mode */
+.dark {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --border-color: #334155;
+}
+
+.dark body {
+  background-color: #0f172a;
+  color: #f8fafc;
+}
+
+.dark .bg-slate-50 { background-color: #0f172a; }
+.dark .bg-white { background-color: #1e293b; }
+.dark .bg-slate-100 { background-color: #1e293b; }
+.dark .bg-slate-100\/50 { background-color: rgba(30, 41, 59, 0.5); }
+.dark .bg-slate-50\/80 { background-color: rgba(15, 23, 42, 0.8); }
+.dark .bg-brand-light { background-color: #334155; }
+
+.dark .text-brand-gray { color: #f8fafc; }
+.dark .text-slate-700 { color: #e2e8f0; }
+.dark .text-slate-600 { color: #cbd5e1; }
+.dark .text-slate-500 { color: #94a3b8; }
+.dark .text-slate-400 { color: #64748b; }
+
+.dark .border-slate-200 { border-color: #334155; }
+.dark .border-slate-100 { border-color: #1e293b; }
+.dark .divide-slate-100 > * + * { border-color: #334155; }
+
+.dark .hover\:bg-slate-50:hover { background-color: #334155; }
+.dark .hover\:bg-slate-100:hover { background-color: #334155; }
+
+.dark input, .dark select, .dark textarea {
+  background-color: #334155 !important;
+  border-color: #475569 !important;
+  color: #f8fafc !important;
+}
+
+.dark input::placeholder, .dark textarea::placeholder {
+  color: #64748b !important;
+}
+
+.dark .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3); }
+.dark .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4); }
+.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+
+/* Glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-dark {
+  background: rgba(87, 87, 86, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .glass {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-dark {
+  background: rgba(87, 87, 86, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.dark .glass {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .glass-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Efecto hover con glass */
+.glass-hover:hover {
+  background: rgba(255, 255, 255, 0.85);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.dark .glass-hover:hover {
+  background: rgba(30, 41, 59, 0.85);
+}
+
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@19.2.0",
+    "react/": "https://esm.sh/react@19.2.0/",
+    "react-dom": "https://esm.sh/react-dom@19.2.0",
+    "react-dom/": "https://esm.sh/react-dom@19.2.0/",
+    "@google/genai": "https://esm.sh/@google/genai@1.41.0",
+    "jspdf": "https://esm.sh/jspdf@2.5.1",
+    "html2canvas": "https://esm.sh/html2canvas@1.4.1"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <div id="root"></div>
+<script type="module" src="/src/main.tsx"></script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
