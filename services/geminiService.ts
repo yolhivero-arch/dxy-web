@@ -100,7 +100,7 @@ export const analyzeSalesImage = async (base64Image: string) => {
 export const parsePurchaseInvoice = async (invoiceText: string, products: Product[]) => {
   if (!invoiceText.trim()) return null;
   const productContext = products.map((p) => ({ id: p.id, name: p.name, brand: p.brand }));
-  const prompt = 'Procesa esta factura: "${invoiceText}". Productos disponibles: ${JSON.stringify(productContext)}. Devuelve array JSON con id, quantity, providerCost.`;
+  const prompt = `Procesa esta factura: "${invoiceText}". Productos disponibles: ${JSON.stringify(productContext)}. Devuelve array JSON con id, quantity, providerCost.`;
   try {
     const ai = getAI();
     const response = await ai.models.generateContent({
